@@ -337,15 +337,6 @@ function TeamSearchPage() {
             >
               Clear all filters
             </button>
-
-            {selectedSkills.length > 0 && (
-              <div className="flex items-center space-x-2">
-                <span className="text-sm text-gray-600 font-medium">
-                  {selectedSkills.length} skill
-                  {selectedSkills.length !== 1 ? "s" : ""} selected
-                </span>
-              </div>
-            )}
           </div>
 
           <div className="text-sm text-gray-600 font-medium">
