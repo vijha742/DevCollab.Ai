@@ -1,20 +1,15 @@
 "use client";
-import { auth0 } from "@/lib/auth0";
 import Navbar from "@/components/Navbar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  // Note: Auth0 session would need to be handled differently in                      {/* Fallback for when video is not available */}
-  <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-    <div className="text-center">
-      <div className="text-6xl mb-4"></div>
-      <p className="text-gray-600 font-medium">Hero Video Loading...</p>
-    </div>
-  </div>;
+  const [hasCompletedProfile, setHasCompletedProfile] = useState(false);
 
-  // Note: Auth0 session would need to be handled differently in client component
-  // For now, we'll use a placeholder
-  const user = null; // You'll need to implement proper auth state management
+  useEffect(() => {
+    // Check if user has completed profile from localStorage
+    const profileCompleted = localStorage.getItem("profile_completed");
+    setHasCompletedProfile(!!profileCompleted);
+  }, []);
 
   useEffect(() => {
     // Dynamically import GSAP to avoid SSR issues
@@ -476,9 +471,9 @@ export default function Home() {
               Join thousands of developers and designers who are already
               building the future together on DevCollab.Ai
             </p>
-            {!user ? (
+            {!hasCompletedProfile ? (
               <a
-                href="/api/auth/login"
+                href="/onboarding"
                 className="bg-gradient-to-r from-black to-gray-800 hover:from-gray-800 hover:to-black text-white font-semibold py-4 px-12 rounded-2xl transition-all duration-300 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transform hover:-translate-y-1 text-lg"
               >
                 Get Started Free
