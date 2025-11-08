@@ -1,12 +1,27 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Navbar from "../../components/Navbar";
-function TeamSearchPage() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [selectedSkills, setSelectedSkills] = useState([]);
-  const [filteredUsers, setFilteredUsers] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [showAllSkills, setShowAllSkills] = useState(false);
+
+// Type definitions
+interface User {
+  id: number;
+  name: string;
+  role: string;
+  skills: string[];
+  experience: string;
+  location: string;
+  avatar: string;
+  bio: string;
+  rating: number;
+  projects: number;
+}
+
+function TeamSearchPage(): React.JSX.Element {
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [selectedSkills, setSelectedSkills] = useState<string[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [showAllSkills, setShowAllSkills] = useState<boolean>(false);
 
   // Sample skills data
   const availableSkills = [
@@ -51,7 +66,7 @@ function TeamSearchPage() {
   ];
 
   // Sample user data
-  const sampleUsers = [
+  const sampleUsers: User[] = [
     {
       id: 1,
       name: "Alice Johnson",
@@ -194,23 +209,23 @@ function TeamSearchPage() {
     return () => clearTimeout(timer);
   }, [searchQuery, selectedSkills]);
 
-  const toggleSkill = (skill) => {
+  const toggleSkill = (skill: string): void => {
     setSelectedSkills((prev) =>
       prev.includes(skill) ? prev.filter((s) => s !== skill) : [...prev, skill]
     );
   };
 
-  const clearAllFilters = () => {
+  const clearAllFilters = (): void => {
     setSearchQuery("");
     setSelectedSkills([]);
   };
 
-  const toggleShowAllSkills = () => {
+  const toggleShowAllSkills = (): void => {
     setShowAllSkills(!showAllSkills);
   };
 
   // Display limited skills or all skills based on state
-  const displayedSkills = showAllSkills
+  const displayedSkills: string[] = showAllSkills
     ? availableSkills
     : availableSkills.slice(0, 8);
 
@@ -275,7 +290,9 @@ function TeamSearchPage() {
                 type="text"
                 placeholder="Search by name, role, or skills..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+                  setSearchQuery(e.target.value)
+                }
                 className="font-inter block w-full pl-16 pr-6 py-4 border-2 border-gray-200 rounded-2xl leading-5 bg-white/70 backdrop-blur-sm text-gray-900 placeholder-gray-500 focus:outline-none focus:border-black focus:ring-4 focus:ring-black/10 transition-all duration-300 text-lg font-medium shadow-inner"
               />
             </div>
@@ -288,7 +305,7 @@ function TeamSearchPage() {
             </h3>
             <div className="flex items-start justify-between gap-4">
               <div className="flex flex-wrap gap-2 flex-1">
-                {displayedSkills.map((skill) => (
+                {displayedSkills.map((skill: string) => (
                   <button
                     key={skill}
                     onClick={() => toggleSkill(skill)}
@@ -357,7 +374,7 @@ function TeamSearchPage() {
         {selectedSkills.length > 0 && (
           <div className="mb-8">
             <div className="flex flex-wrap gap-2">
-              {selectedSkills.map((skill) => (
+              {selectedSkills.map((skill: string) => (
                 <span
                   key={skill}
                   className="inline-flex items-center px-4 py-2 rounded-xl text-sm bg-black text-white font-medium shadow-lg shadow-black/20"
@@ -390,7 +407,7 @@ function TeamSearchPage() {
         {/* User Cards */}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {[...Array(8)].map((_, index) => (
+            {[...Array(8)].map((_, index: number) => (
               <div
                 key={index}
                 className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl p-6 animate-pulse shadow-lg"
@@ -437,7 +454,7 @@ function TeamSearchPage() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredUsers.map((user) => (
+            {filteredUsers.map((user: User) => (
               <div
                 key={user.id}
                 className="group bg-white/90 backdrop-blur-sm border border-gray-200/60 rounded-2xl hover:shadow-2xl hover:shadow-black/10 transition-all duration-500 p-6 hover:scale-105 hover:border-gray-300"
@@ -470,7 +487,7 @@ function TeamSearchPage() {
                     Skills
                   </p>
                   <div className="flex flex-wrap gap-1">
-                    {user.skills.slice(0, 2).map((skill) => (
+                    {user.skills.slice(0, 2).map((skill: string) => (
                       <span
                         key={skill}
                         className="px-2 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs border border-gray-200 font-medium"
