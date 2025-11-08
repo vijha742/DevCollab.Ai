@@ -1,36 +1,98 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# DevCollab.Ai - Auth0 Integration
 
-## Getting Started
+A beautiful, modern authentication page built with Next.js 15 and Auth0.
 
-First, run the development server:
+## 🎨 Design Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Modern UI**: Clean, professional design with gradient backgrounds and smooth animations
+- **Responsive**: Fully responsive design that works on all devices
+- **Dark Mode**: Automatic dark mode support based on system preferences
+- **Accessibility**: Focus states and proper ARIA labels for screen readers
+- **Loading States**: Beautiful loading animations and states
+- **Profile Cards**: Elegant user profile display with stats and verification badges
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🚀 Getting Started
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Prerequisites
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- Node.js 18+
+- An Auth0 account (free tier available)
 
-## Learn More
+### Installation
 
-To learn more about Next.js, take a look at the following resources:
+1. **Clone and install dependencies:**
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+   ```bash
+   cd client
+   npm install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+2. **Set up Auth0:**
 
-## Deploy on Vercel
+   - Go to [Auth0 Dashboard](https://manage.auth0.com/)
+   - Create a new Application (Single Page Application)
+   - Configure Allowed Callback URLs: `http://localhost:3000/api/auth/callback`
+   - Configure Allowed Logout URLs: `http://localhost:3000`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+3. **Environment Configuration:**
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+   ```bash
+   cp .env.example .env.local
+   ```
+
+   Fill in your Auth0 credentials in `.env.local`:
+
+   ```env
+   AUTH0_SECRET='use-openssl-rand-hex-32-to-generate'
+   AUTH0_BASE_URL='http://localhost:3000'
+   AUTH0_ISSUER_BASE_URL='https://YOUR_DOMAIN.auth0.com'
+   AUTH0_CLIENT_ID='your_client_id'
+   AUTH0_CLIENT_SECRET='your_client_secret'
+   ```
+
+4. **Run the development server:**
+
+   ```bash
+   npm run dev
+   ```
+
+   Open [http://localhost:3000](http://localhost:3000) to see the application.
+
+## 🎯 Features
+
+### 🔐 Authentication
+
+- Secure Auth0 integration
+- Login/logout functionality
+- Protected routes
+- Session management
+
+### 🎨 User Interface
+
+- **Gradient Backgrounds**: Beautiful animated gradients
+- **Glassmorphism**: Modern card designs with backdrop blur
+- **Hover Effects**: Smooth button animations and interactions
+- **Typography**: Clean, readable fonts with proper hierarchy
+- **Icons**: Emoji-based icons for a friendly, modern look
+
+### 📱 Responsive Design
+
+- Mobile-first approach
+- Tablet and desktop optimizations
+- Flexible layouts that adapt to any screen size
+
+### 🌙 Dark Mode
+
+- Automatic detection of system preferences
+- Smooth transitions between light and dark themes
+- Optimized contrast for accessibility
+
+## 🛠️ Tech Stack
+
+- **Framework**: Next.js 15
+- **Authentication**: Auth0
+- **Styling**: Custom CSS with CSS Variables
+- **TypeScript**: Full type safety
+- **Fonts**: Inter (Google Fonts)
+
+Built with ❤️ using Next.js and Auth0
