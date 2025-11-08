@@ -15,22 +15,44 @@ export default async function Home() {
           alt="Auth0 Logo"
           className="auth0-logo"
         />
-        <h1 className="main-title">Next.js + Auth0</h1>
+        <h1 className="main-title">DevCollab.Ai</h1>
+        <p className="subtitle">Secure Authentication with Next.js + Auth0</p>
 
         <div className="action-card">
           {user ? (
             <div className="logged-in-section">
-              <p className="logged-in-message">✅ Successfully logged in!</p>
-              <Profile />
-              <LogoutButton />
+              <p className="logged-in-message">
+                <span>🎉</span> Welcome back! You're successfully authenticated.
+              </p>
+              <Profile user={user} />
+              <div className="button-group">
+                <LogoutButton />
+              </div>
             </div>
           ) : (
-            <>
+            <div className="login-section">
+              <h2 className="welcome-title">Welcome to DevCollab.Ai</h2>
               <p className="action-text">
-                Welcome! Please log in to access your protected content.
+                🚀 Ready to start collaborating? Sign in with your Auth0 account
+                to access your personalized dashboard and connect with other
+                developers.
               </p>
+              <div className="features-list">
+                <div className="feature-item">
+                  <span className="feature-icon">🔒</span>
+                  <span>Secure Authentication</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">👥</span>
+                  <span>Team Collaboration</span>
+                </div>
+                <div className="feature-item">
+                  <span className="feature-icon">⚡</span>
+                  <span>Fast Development</span>
+                </div>
+              </div>
               <LoginButton />
-            </>
+            </div>
           )}
         </div>
       </div>

@@ -2,8 +2,8 @@
 
 export default function LogoutButton() {
   return (
-    <a href="/docs/auth/logout" className="button logout">
-      Log Out
+    <a href="/api/auth/logout" className="button logout">
+      🚪 Log Out
     </a>
   );
 }

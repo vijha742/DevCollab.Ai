@@ -2,8 +2,8 @@
 
 export default function LoginButton() {
   return (
-    <a href="/docs/auth/login" className="button login">
-      Log In
+    <a href="/api/auth/login" className="button login">
+      🔐 Log In with Auth0
     </a>
   );
 }
