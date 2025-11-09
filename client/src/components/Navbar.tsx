@@ -146,7 +146,7 @@ function Navbar() {
                       >
                         Logout
                       </a>
-                    </a>
+                    </div>
                   ) : (
                     <Link
                       href="/api/auth/login?returnTo=%2Fonboarding"
@@ -168,20 +168,20 @@ function Navbar() {
                     {/* Animated hamburger lines */}
                     <span
                       className={`absolute left-0 top-1 w-5 h-0.5 bg-black rounded-full transition-all duration-300 transform ${isMobileMenuOpen
-                          ? "rotate-45 translate-y-1.5"
-                          : "rotate-0 translate-y-0"
+                        ? "rotate-45 translate-y-1.5"
+                        : "rotate-0 translate-y-0"
                         }`}
                     />
                     <span
                       className={`absolute left-0 top-2.5 w-5 h-0.5 bg-black rounded-full transition-all duration-300 ${isMobileMenuOpen
-                          ? "opacity-0 scale-0"
-                          : "opacity-100 scale-100"
+                        ? "opacity-0 scale-0"
+                        : "opacity-100 scale-100"
                         }`}
                     />
                     <span
                       className={`absolute left-0 top-4 w-5 h-0.5 bg-black rounded-full transition-all duration-300 transform ${isMobileMenuOpen
-                          ? "-rotate-45 -translate-y-1.5"
-                          : "rotate-0 translate-y-0"
+                        ? "-rotate-45 -translate-y-1.5"
+                        : "rotate-0 translate-y-0"
                         }`}
                     />
                   </div>
@@ -191,16 +191,16 @@ function Navbar() {
                 <div className="absolute -top-1 -right-1">
                   <div
                     className={`w-2 h-2 bg-black rounded-full transition-all duration-500 ${isMobileMenuOpen
-                        ? "scale-0 opacity-0"
-                        : "scale-100 opacity-30"
+                      ? "scale-0 opacity-0"
+                      : "scale-100 opacity-30"
                       }`}
                   ></div>
                 </div>
                 <div className="absolute -bottom-1 -left-1">
                   <div
                     className={`w-1.5 h-1.5 bg-black rounded-full transition-all duration-700 ${isMobileMenuOpen
-                        ? "scale-0 opacity-0"
-                        : "scale-100 opacity-20"
+                      ? "scale-0 opacity-0"
+                      : "scale-100 opacity-20"
                       }`}
                   ></div>
                 </div>
@@ -211,8 +211,8 @@ function Navbar() {
           {/* Enhanced Mobile Navigation */}
           <div
             className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${isMobileMenuOpen
-                ? "max-h-96 opacity-100 mt-4 pt-4 border-t border-white/20"
-                : "max-h-0 opacity-0"
+              ? "max-h-96 opacity-100 mt-4 pt-4 border-t border-white/20"
+              : "max-h-0 opacity-0"
               }`}
           >
             <div className="flex flex-col space-y-3">
@@ -221,8 +221,8 @@ function Navbar() {
                 href="/"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${isMobileMenuOpen
-                    ? "translate-x-0 opacity-100"
-                    : "-translate-x-4 opacity-0"
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-4 opacity-0"
                   }`}
                 style={{ transitionDelay: "100ms" }}
               >
@@ -232,8 +232,8 @@ function Navbar() {
                 href="/Team"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${isMobileMenuOpen
-                    ? "translate-x-0 opacity-100"
-                    : "-translate-x-4 opacity-0"
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-4 opacity-0"
                   }`}
                 style={{ transitionDelay: "200ms" }}
               >
@@ -244,8 +244,8 @@ function Navbar() {
                   href="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${isMobileMenuOpen
-                      ? "translate-x-0 opacity-100"
-                      : "-translate-x-4 opacity-0"
+                    ? "translate-x-0 opacity-100"
+                    : "-translate-x-4 opacity-0"
                     }`}
                   style={{ transitionDelay: "250ms" }}
                 >
@@ -256,8 +256,8 @@ function Navbar() {
                 href="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${isMobileMenuOpen
-                    ? "translate-x-0 opacity-100"
-                    : "-translate-x-4 opacity-0"
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-4 opacity-0"
                   }`}
                 style={{ transitionDelay: "300ms" }}
               >
@@ -267,8 +267,8 @@ function Navbar() {
                 href="/contact"
                 onClick={() => setIsMobileMenuOpen(false)}
                 className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${isMobileMenuOpen
-                    ? "translate-x-0 opacity-100"
-                    : "-translate-x-4 opacity-0"
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-4 opacity-0"
                   }`}
                 style={{ transitionDelay: "400ms" }}
               >
@@ -278,8 +278,8 @@ function Navbar() {
               {/* Mobile get started section */}
               <div
                 className={`pt-3 border-t border-white/20 transform ${isMobileMenuOpen
-                    ? "translate-x-0 opacity-100"
-                    : "-translate-x-4 opacity-0"
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-4 opacity-0"
                   }`}
                 style={{ transitionDelay: "500ms" }}
               >
