@@ -1,5 +1,8 @@
 "use client";
 
+import { useBackendAuth } from "@/hooks/useBackendAuth";
+import { TokenStorage } from "@/lib/tokenStorage";
+
 interface ProfileProps {
   user?: {
     name?: string;
@@ -9,8 +12,17 @@ interface ProfileProps {
   };
 }
 
-export default function Profile({ user }: ProfileProps) {
-  if (!user) {
+export default function Profile({ user: initialUser }: ProfileProps) {
+  // Use the backend auth hook to ensure sync with backend
+  const { user, isLoading, error, isSynced } = useBackendAuth();
+
+  // Get backend user data if available
+  const backendUser = TokenStorage.getUserData();
+
+  // Use Auth0 user or initial user
+  const displayUser = user || initialUser;
+
+  if (isLoading) {
     return (
       <div className="loading-state">
         <div className="loading-text">Loading your profile...</div>
@@ -18,21 +30,40 @@ export default function Profile({ user }: ProfileProps) {
     );
   }
 
+  if (error) {
+    return (
+      <div className="error-state">
+        <div className="error-text">Error: {error.toString()}</div>
+      </div>
+    );
+  }
+
+  if (!displayUser) {
+    return (
+      <div className="loading-state">
+        <div className="loading-text">No user data available</div>
+      </div>
+    );
+  }
+
   return (
     <div className="profile-card">
       <div className="profile-header">
-        {user.picture && (
+        {displayUser.picture && (
           <img
-            src={user.picture}
-            alt={user.name || "User profile"}
+            src={displayUser.picture}
+            alt={displayUser.name || "User profile"}
             className="profile-picture"
           />
         )}
         <div className="profile-info">
-          <h2 className="profile-name">{user.name || "Anonymous User"}</h2>
-          <p className="profile-email">{user.email}</p>
-          {user.email_verified && (
+          <h2 className="profile-name">{displayUser.name || "Anonymous User"}</h2>
+          <p className="profile-email">{displayUser.email}</p>
+          {displayUser.email_verified && (
             <span className="verified-badge">✓ Verified</span>
+          )}
+          {isSynced && backendUser && (
+            <span className="sync-badge">🔗 Synced with Backend (ID: {backendUser.userId})</span>
           )}
         </div>
       </div>
@@ -46,6 +77,12 @@ export default function Profile({ user }: ProfileProps) {
           <span className="stat-label">Account</span>
           <span className="stat-value">🔒 Secure</span>
         </div>
+        {isSynced && (
+          <div className="stat-item">
+            <span className="stat-label">Backend Auth</span>
+            <span className="stat-value">✓ Active</span>
+          </div>
+        )}
       </div>
     </div>
   );

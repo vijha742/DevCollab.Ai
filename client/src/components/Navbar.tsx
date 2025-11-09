@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { useUser } from "@auth0/nextjs-auth0/client";
+import { TokenStorage } from "@/lib/tokenStorage";
+import { apiClient } from "@/lib/api";
 
 function Navbar() {
   const { user, isLoading } = useUser();
@@ -41,11 +43,36 @@ function Navbar() {
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
+  const handleLogout = async (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+
+    try {
+      // Get user data to call backend logout
+      const userData = TokenStorage.getUserData();
+
+      if (userData) {
+        // Logout from backend
+        await apiClient.logout(userData.userId).catch(err => {
+          console.error('Backend logout failed:', err);
+        });
+      }
+
+      // Clear local tokens
+      TokenStorage.clearTokens();
+
+      // Redirect to Auth0 logout
+      window.location.href = '/api/auth/logout';
+    } catch (error) {
+      console.error('Logout error:', error);
+      // Ensure we always redirect to the Auth0 logout endpoint
+      window.location.href = '/api/auth/logout';
+    }
+  };
+
   return (
     <nav
-      className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-6xl transition-all duration-300 ease-in-out ${
-        isVisible ? "translate-y-0 opacity-100" : "-translate-y-20 opacity-0"
-      }`}
+      className={`fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-[95%] max-w-6xl transition-all duration-300 ease-in-out ${isVisible ? "translate-y-0 opacity-100" : "-translate-y-20 opacity-0"
+        }`}
     >
       <div className="bg-white/20 backdrop-blur-lg border border-white/30 rounded-2xl shadow-lg">
         <div className="px-6 py-3">
@@ -102,12 +129,13 @@ function Navbar() {
                           {user.name?.split(" ")[0] || "User"}
                         </span>
                       </div>
-                      <Link
+                      <a
                         href="/api/auth/logout"
-                        className="bg-black/80 hover:bg-black text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200"
+                        onClick={handleLogout}
+                        className="bg-black/80 hover:bg-black text-white px-4 py-2 rounded-full text-sm font-medium transition-colors duration-200 cursor-pointer"
                       >
                         Logout
-                      </Link>
+                      </a>
                     </div>
                   ) : (
                     <Link
@@ -129,25 +157,22 @@ function Navbar() {
                   <div className="w-5 h-5 relative">
                     {/* Animated hamburger lines */}
                     <span
-                      className={`absolute left-0 top-1 w-5 h-0.5 bg-black rounded-full transition-all duration-300 transform ${
-                        isMobileMenuOpen
-                          ? "rotate-45 translate-y-1.5"
-                          : "rotate-0 translate-y-0"
-                      }`}
+                      className={`absolute left-0 top-1 w-5 h-0.5 bg-black rounded-full transition-all duration-300 transform ${isMobileMenuOpen
+                        ? "rotate-45 translate-y-1.5"
+                        : "rotate-0 translate-y-0"
+                        }`}
                     />
                     <span
-                      className={`absolute left-0 top-2.5 w-5 h-0.5 bg-black rounded-full transition-all duration-300 ${
-                        isMobileMenuOpen
-                          ? "opacity-0 scale-0"
-                          : "opacity-100 scale-100"
-                      }`}
+                      className={`absolute left-0 top-2.5 w-5 h-0.5 bg-black rounded-full transition-all duration-300 ${isMobileMenuOpen
+                        ? "opacity-0 scale-0"
+                        : "opacity-100 scale-100"
+                        }`}
                     />
                     <span
-                      className={`absolute left-0 top-4 w-5 h-0.5 bg-black rounded-full transition-all duration-300 transform ${
-                        isMobileMenuOpen
-                          ? "-rotate-45 -translate-y-1.5"
-                          : "rotate-0 translate-y-0"
-                      }`}
+                      className={`absolute left-0 top-4 w-5 h-0.5 bg-black rounded-full transition-all duration-300 transform ${isMobileMenuOpen
+                        ? "-rotate-45 -translate-y-1.5"
+                        : "rotate-0 translate-y-0"
+                        }`}
                     />
                   </div>
                 </div>
@@ -155,20 +180,18 @@ function Navbar() {
                 {/* Floating dots effect */}
                 <div className="absolute -top-1 -right-1">
                   <div
-                    className={`w-2 h-2 bg-black rounded-full transition-all duration-500 ${
-                      isMobileMenuOpen
-                        ? "scale-0 opacity-0"
-                        : "scale-100 opacity-30"
-                    }`}
+                    className={`w-2 h-2 bg-black rounded-full transition-all duration-500 ${isMobileMenuOpen
+                      ? "scale-0 opacity-0"
+                      : "scale-100 opacity-30"
+                      }`}
                   ></div>
                 </div>
                 <div className="absolute -bottom-1 -left-1">
                   <div
-                    className={`w-1.5 h-1.5 bg-black rounded-full transition-all duration-700 ${
-                      isMobileMenuOpen
-                        ? "scale-0 opacity-0"
-                        : "scale-100 opacity-20"
-                    }`}
+                    className={`w-1.5 h-1.5 bg-black rounded-full transition-all duration-700 ${isMobileMenuOpen
+                      ? "scale-0 opacity-0"
+                      : "scale-100 opacity-20"
+                      }`}
                   ></div>
                 </div>
               </button>
@@ -177,22 +200,20 @@ function Navbar() {
 
           {/* Enhanced Mobile Navigation */}
           <div
-            className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${
-              isMobileMenuOpen
-                ? "max-h-96 opacity-100 mt-4 pt-4 border-t border-white/20"
-                : "max-h-0 opacity-0"
-            }`}
+            className={`md:hidden overflow-hidden transition-all duration-500 ease-in-out ${isMobileMenuOpen
+              ? "max-h-96 opacity-100 mt-4 pt-4 border-t border-white/20"
+              : "max-h-0 opacity-0"
+              }`}
           >
             <div className="flex flex-col space-y-3">
               {/* Mobile nav links with staggered animation */}
               <Link
                 href="/"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${
-                  isMobileMenuOpen
-                    ? "translate-x-0 opacity-100"
-                    : "-translate-x-4 opacity-0"
-                }`}
+                className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${isMobileMenuOpen
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-4 opacity-0"
+                  }`}
                 style={{ transitionDelay: "100ms" }}
               >
                 Home
@@ -200,11 +221,10 @@ function Navbar() {
               <Link
                 href="/Team"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${
-                  isMobileMenuOpen
-                    ? "translate-x-0 opacity-100"
-                    : "-translate-x-4 opacity-0"
-                }`}
+                className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${isMobileMenuOpen
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-4 opacity-0"
+                  }`}
                 style={{ transitionDelay: "200ms" }}
               >
                 Team
@@ -212,11 +232,10 @@ function Navbar() {
               <Link
                 href="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${
-                  isMobileMenuOpen
-                    ? "translate-x-0 opacity-100"
-                    : "-translate-x-4 opacity-0"
-                }`}
+                className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${isMobileMenuOpen
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-4 opacity-0"
+                  }`}
                 style={{ transitionDelay: "300ms" }}
               >
                 About
@@ -224,11 +243,10 @@ function Navbar() {
               <Link
                 href="/contact"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${
-                  isMobileMenuOpen
-                    ? "translate-x-0 opacity-100"
-                    : "-translate-x-4 opacity-0"
-                }`}
+                className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${isMobileMenuOpen
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-4 opacity-0"
+                  }`}
                 style={{ transitionDelay: "400ms" }}
               >
                 Contact
@@ -236,11 +254,10 @@ function Navbar() {
 
               {/* Mobile auth section */}
               <div
-                className={`pt-3 border-t border-white/20 transform ${
-                  isMobileMenuOpen
-                    ? "translate-x-0 opacity-100"
-                    : "-translate-x-4 opacity-0"
-                }`}
+                className={`pt-3 border-t border-white/20 transform ${isMobileMenuOpen
+                  ? "translate-x-0 opacity-100"
+                  : "-translate-x-4 opacity-0"
+                  }`}
                 style={{ transitionDelay: "500ms" }}
               >
                 {user ? (
@@ -255,13 +272,16 @@ function Navbar() {
                         {user.name?.split(" ")[0] || "User"}
                       </span>
                     </div>
-                    <Link
+                    <a
                       href="/api/auth/logout"
-                      onClick={() => setIsMobileMenuOpen(false)}
-                      className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-center"
+                      onClick={(e) => {
+                        setIsMobileMenuOpen(false);
+                        handleLogout(e);
+                      }}
+                      className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors duration-200 text-center cursor-pointer"
                     >
                       Logout
-                    </Link>
+                    </a>
                   </div>
                 ) : (
                   <Link
