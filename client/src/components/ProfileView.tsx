@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Navbar from "./Navbar";
 
 interface UserProfile {
   firstName: string;
@@ -32,6 +33,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ profile, onEdit }) => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-100 via-white to-gray-200 relative overflow-hidden">
       {/* Geometric Background Elements */}
+      <Navbar />
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-0 left-0 w-96 h-96 bg-black/5 rounded-full -translate-x-48 -translate-y-48"></div>
         <div className="absolute top-1/4 right-0 w-64 h-64 bg-black/3 rounded-full translate-x-32"></div>
@@ -51,7 +53,7 @@ const ProfileView: React.FC<ProfileViewProps> = ({ profile, onEdit }) => {
         }}
       ></div>
 
-      <div className="relative z-10 p-4">
+      <div className="relative md:mt-20 z-10 p-4">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="bg-white/95 backdrop-blur-sm rounded-3xl shadow-2xl p-8 mb-6 border border-white/50">
