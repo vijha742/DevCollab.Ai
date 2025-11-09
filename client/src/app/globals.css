@@ -4,6 +4,19 @@
   --background: #ffffff;
   --foreground: #171717;
 }
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for card content */
+.hide-scrollbar {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
 
 @theme inline {
   --color-background: var(--background);

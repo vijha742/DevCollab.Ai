@@ -26,6 +26,31 @@ function TeamSearchPage(): React.JSX.Element {
   const [showAllSkills, setShowAllSkills] = useState<boolean>(false);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
+  const [currentUserIndex, setCurrentUserIndex] = useState<number>(0);
+
+  // My profile data (current user)
+  const myProfile: User = {
+    id: 0,
+    username: "your_username",
+    email: "your.email@example.com",
+    bio: "Full-stack developer passionate about creating innovative solutions. Looking to collaborate on exciting projects with talented developers.",
+    interests: ["Fintech", "AI/ML", "Web3"],
+    skills: ["React", "Node.js", "TypeScript", "Python", "AWS"],
+    projects: [
+      {
+        name: "DevCollab.Ai",
+        description: "AI-powered collaboration platform for developers",
+        link: "https://github.com/your-username/devcollab-ai",
+      },
+      {
+        name: "Portfolio Website",
+        description: "Personal portfolio showcasing my projects and skills",
+        link: "https://your-portfolio.com",
+      },
+    ],
+    avatar:
+      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=200&h=200&fit=crop&crop=face",
+  };
 
   // Sample skills data
   const availableSkills = [
@@ -312,6 +337,33 @@ function TeamSearchPage(): React.JSX.Element {
     setShowAllSkills(!showAllSkills);
   };
 
+  const openUserDetails = (user: User): void => {
+    setSelectedUser(user);
+    setIsSidebarOpen(true);
+  };
+
+  const closeSidebar = (): void => {
+    setIsSidebarOpen(false);
+    setTimeout(() => setSelectedUser(null), 300);
+  };
+
+  const nextUser = (): void => {
+    if (currentUserIndex < filteredUsers.length - 1) {
+      setCurrentUserIndex(currentUserIndex + 1);
+    }
+  };
+
+  const previousUser = (): void => {
+    if (currentUserIndex > 0) {
+      setCurrentUserIndex(currentUserIndex - 1);
+    }
+  };
+
+  // Reset current user index when filtered users change
+  useEffect(() => {
+    setCurrentUserIndex(0);
+  }, [filteredUsers]);
+
   // Display limited skills or all skills based on state
   const displayedSkills: string[] = showAllSkills
     ? availableSkills
@@ -361,7 +413,7 @@ function TeamSearchPage(): React.JSX.Element {
             <div className="relative">
               <div className="absolute inset-y-0 left-0 pl-6 flex items-center pointer-events-none">
                 <svg
-                  className="h-6 w-6 text-gray-400"
+                  className="h-6 w-6 text-black"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -492,7 +544,372 @@ function TeamSearchPage(): React.JSX.Element {
           </div>
         )}
 
-        {/* User Cards */}
+        {/* User Cards Section - Split Layout */}
+        {loading ? (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 lg:gap-8">
+            {/* Loading state for both cards */}
+            <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl lg:rounded-3xl p-4 lg:p-6 animate-pulse shadow-lg h-[85vh] overflow-hidden hide-scrollbar">
+              <div className="flex items-center mb-4">
+                <div className="w-14 h-14 lg:w-16 lg:h-16 bg-gray-200 rounded-full"></div>
+                <div className="ml-3 lg:ml-4 flex-1">
+                  <div className="h-4 lg:h-5 bg-gray-200 rounded-lg mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded-lg w-2/3"></div>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="h-3 bg-gray-200 rounded-lg"></div>
+                <div className="h-3 bg-gray-200 rounded-lg w-3/4"></div>
+                <div className="h-8 bg-gray-200 rounded-xl mt-4"></div>
+              </div>
+            </div>
+            <div className="bg-white/90 backdrop-blur-sm border border-gray-200 rounded-2xl lg:rounded-3xl p-4 lg:p-6 animate-pulse shadow-lg h-[85vh] overflow-hidden hide-scrollbar">
+              <div className="flex items-center mb-4">
+                <div className="w-14 h-14 lg:w-16 lg:h-16 bg-gray-200 rounded-full"></div>
+                <div className="ml-3 lg:ml-4 flex-1">
+                  <div className="h-4 lg:h-5 bg-gray-200 rounded-lg mb-2"></div>
+                  <div className="h-3 bg-gray-200 rounded-lg w-2/3"></div>
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="h-3 bg-gray-200 rounded-lg"></div>
+                <div className="h-3 bg-gray-200 rounded-lg w-3/4"></div>
+                <div className="h-8 bg-gray-200 rounded-xl mt-4"></div>
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            {/* My Profile Card - Left Side */}
+            <div className="bg-white/95 md:flex md:flex-col backdrop-blur-sm border border-gray-200/60 rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-500 p-6 md:h-[85vh] overflow-y-hidden">
+              <div className="flex items-center mb-4">
+                <div className="relative flex-shrink-0">
+                  <img
+                    src={myProfile.avatar}
+                    alt={myProfile.username}
+                    className="w-16 h-16 rounded-full object-cover border-4 border-blue-200"
+                  />
+                  <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center">
+                    <span className="text-white text-xs font-bold">ME</span>
+                  </div>
+                </div>
+                <div className="ml-4 flex-1 min-w-0">
+                  <h3 className="text-xl font-bold text-gray-900 truncate">
+                    {myProfile.username}
+                  </h3>
+                  <p
+                    className="text-gray-600 font-medium truncate text-sm"
+                    title={myProfile.email}
+                  >
+                    {myProfile.email}
+                  </p>
+                  <div className="flex items-center mt-1">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full mr-2"></div>
+                    <span className="text-xs text-blue-600 font-semibold">
+                      Your Profile
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              <p className="text-gray-700 text-sm mb-4 leading-relaxed">
+                {myProfile.bio}
+              </p>
+
+              {/* My Interests */}
+              <div className="mb-4">
+                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                  My Interests
+                </h4>
+                <div className="flex flex-wrap gap-1">
+                  {myProfile.interests.map((interest: string) => (
+                    <span
+                      key={interest}
+                      className="px-2 py-1 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium border border-blue-200"
+                    >
+                      {interest}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* My Skills */}
+              <div className="mb-4">
+                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                  My Skills
+                </h4>
+                <div className="flex flex-wrap gap-1">
+                  {myProfile.skills.map((skill: string) => (
+                    <span
+                      key={skill}
+                      className="px-2 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium border border-gray-200"
+                    >
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+              </div>
+
+              {/* My Projects */}
+              <div className="mb-6">
+                <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                  My Projects
+                </h4>
+                <div className="space-y-2">
+                  {myProfile.projects.map((project, index: number) => (
+                    <div
+                      key={index}
+                      className="bg-blue-50 rounded-lg p-3 border border-blue-100"
+                    >
+                      <h5 className="text-sm font-semibold text-gray-900 mb-1">
+                        {project.name}
+                      </h5>
+                      <p className="text-gray-600 text-xs leading-relaxed">
+                        {project.description}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <button className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-lg shadow-blue-600/30 hover:shadow-xl hover:shadow-blue-600/40 transform hover:-translate-y-1">
+                Edit My Profile
+              </button>
+            </div>
+
+            {/* Dynamic User Card - Right Side */}
+            {/* My Profile Card - Left Side */}
+            <div className="bg-white/95 backdrop-blur-sm border border-gray-200/60 rounded-2xl lg:rounded-3xl shadow-2xl hover:shadow-3xl transition-all duration-500 p-4 lg:p-6 h-[85vh] overflow-y-hidden hide-scrollbar">
+              {filteredUsers.length === 0 ? (
+                <div className="text-center py-20">
+                  <svg
+                    className="mx-auto h-16 w-16 text-gray-300 mb-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={1.5}
+                      d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"
+                    />
+                  </svg>
+                  <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                    No team members found
+                  </h3>
+                  <p className="text-gray-500 font-light">
+                    Try adjusting your search criteria or filters to discover
+                    more talent.
+                  </p>
+                </div>
+              ) : (
+                <>
+                  {(() => {
+                    const currentUser = filteredUsers[currentUserIndex];
+                    return (
+                      <>
+                        <div className="flex items-center mb-4">
+                          <div className="relative flex-shrink-0">
+                            <img
+                              src={currentUser.avatar}
+                              alt={currentUser.username}
+                              className="w-16 h-16 rounded-full overflow-hidden object-cover border-4 border-gray-200"
+                            />
+                            <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-green-400 rounded-full border-2 border-white"></div>
+                          </div>
+                          <div className="ml-4 flex-1 min-w-0">
+                            <h3 className="text-xl font-bold text-gray-900 truncate">
+                              {currentUser.username}
+                            </h3>
+                            <p
+                              className="text-gray-600 font-medium truncate text-sm"
+                              title={currentUser.email}
+                            >
+                              {currentUser.email}
+                            </p>
+                            <div className="flex items-center mt-1">
+                              <div className="w-2 h-2 bg-green-400 rounded-full mr-2"></div>
+                              <span className="text-xs text-green-600 font-semibold">
+                                Available
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+
+                        <p className="text-gray-700 text-sm mb-4 leading-relaxed">
+                          {currentUser.bio}
+                        </p>
+
+                        {/* User Interests */}
+                        <div className="mb-4">
+                          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                            Interests
+                          </h4>
+                          <div className="flex flex-wrap gap-1">
+                            {currentUser.interests.map((interest: string) => (
+                              <span
+                                key={interest}
+                                className="px-2 py-1 bg-orange-100 text-orange-700 rounded-lg text-xs font-medium border border-orange-200"
+                              >
+                                {interest}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* User Skills */}
+                        <div className="mb-4">
+                          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                            Skills
+                          </h4>
+                          <div className="flex flex-wrap gap-1">
+                            {currentUser.skills.map((skill: string) => (
+                              <span
+                                key={skill}
+                                className="px-2 py-1 bg-gray-100 text-gray-700 rounded-lg text-xs font-medium border border-gray-200"
+                              >
+                                {skill}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* User Projects */}
+                        <div className="mb-6">
+                          <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
+                            Projects
+                          </h4>
+                          <div className="space-y-2">
+                            {currentUser.projects.map(
+                              (project, index: number) => (
+                                <div
+                                  key={index}
+                                  className="bg-gray-50 rounded-lg p-3 border border-gray-200"
+                                >
+                                  <div className="flex items-start justify-between mb-1">
+                                    <h5 className="text-sm font-semibold text-gray-900">
+                                      {project.name}
+                                    </h5>
+                                    <a
+                                      href={project.link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-blue-600 hover:text-blue-800 transition-colors"
+                                    >
+                                      <svg
+                                        className="w-3 h-3"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                      >
+                                        <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth={2}
+                                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
+                                        />
+                                      </svg>
+                                    </a>
+                                  </div>
+                                  <p className="text-gray-600 text-xs leading-relaxed">
+                                    {project.description}
+                                  </p>
+                                </div>
+                              )
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flex space-x-2">
+                          <button
+                            onClick={() => openUserDetails(currentUser)}
+                            className="flex-1 bg-gradient-to-r from-black to-gray-800 hover:from-gray-800 hover:to-black text-white font-semibold py-3 px-4 rounded-xl transition-all duration-300 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transform hover:-translate-y-1 text-sm"
+                          >
+                            View Full Profile
+                          </button>
+                          <button className="flex-1 border-2 border-gray-300 text-gray-700 font-semibold py-3 px-4 rounded-xl hover:bg-gray-50 hover:border-gray-400 transition-all duration-300 text-sm">
+                            Connect
+                          </button>
+                        </div>
+                      </>
+                    );
+                  })()}
+                </>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Navigation Controls */}
+        {!loading && filteredUsers.length > 0 && (
+          <div className="flex md:mb-5  flex-col sm:flex-row items-center justify-center mt-6 lg:mt-8 space-y-4 sm:space-y-0 sm:space-x-6">
+            <button
+              onClick={previousUser}
+              disabled={currentUserIndex === 0}
+              className={`flex items-center space-x-2 px-4 lg:px-6 py-2 lg:py-3 rounded-xl font-semibold transition-all duration-300 text-sm lg:text-base ${
+                currentUserIndex === 0
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-black text-white hover:bg-gray-800 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              }`}
+            >
+              <svg
+                className="w-4 h-4 lg:w-5 lg:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
+              </svg>
+              <span>Previous</span>
+            </button>
+
+            <div className="flex items-center space-x-2 lg:space-x-4 bg-white/90 backdrop-blur-sm px-4 lg:px-6 py-2 lg:py-3 rounded-xl border border-gray-200 shadow-lg">
+              <span className="text-gray-600 font-medium text-sm lg:text-base">
+                {currentUserIndex + 1} of {filteredUsers.length}
+              </span>
+              <div className="w-24 lg:w-32 bg-gray-200 rounded-full h-2">
+                <div
+                  className="bg-black h-2 rounded-full transition-all duration-300"
+                  style={{
+                    width: `${
+                      ((currentUserIndex + 1) / filteredUsers.length) * 100
+                    }%`,
+                  }}
+                ></div>
+              </div>
+            </div>
+
+            <button
+              onClick={nextUser}
+              disabled={currentUserIndex === filteredUsers.length - 1}
+              className={`flex items-center space-x-2 px-4 lg:px-6 py-2 lg:py-3 rounded-xl font-semibold transition-all duration-300 text-sm lg:text-base ${
+                currentUserIndex === filteredUsers.length - 1
+                  ? "bg-gray-100 text-gray-400 cursor-not-allowed"
+                  : "bg-black text-white hover:bg-gray-800 shadow-lg hover:shadow-xl transform hover:-translate-y-1"
+              }`}
+            >
+              <span>Next</span>
+              <svg
+                className="w-4 h-4 lg:w-5 lg:h-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M9 5l7 7-7 7"
+                />
+              </svg>
+            </button>
+          </div>
+        )}
         {loading ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {[...Array(8)].map((_, index: number) => (
