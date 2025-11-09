@@ -6,6 +6,7 @@ import { TokenStorage } from "@/lib/tokenStorage";
 import { apiClient } from "@/lib/api";
 
 function Navbar() {
+  const { user, isLoading } = useUser();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
@@ -156,7 +157,7 @@ function Navbar() {
                       href="/api/auth/login"
                       className="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors duration-200"
                     >
-                      Sign In
+                      Get Started
                     </Link>
                   )}
                 </>
@@ -248,8 +249,8 @@ function Navbar() {
                   href="/profile"
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${isMobileMenuOpen
-                      ? "translate-x-0 opacity-100"
-                      : "-translate-x-4 opacity-0"
+                    ? "translate-x-0 opacity-100"
+                    : "-translate-x-4 opacity-0"
                     }`}
                   style={{ transitionDelay: "250ms" }}
                 >
