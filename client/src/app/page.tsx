@@ -1,20 +1,15 @@
 "use client";
-import { auth0 } from "@/lib/auth0";
 import Navbar from "@/components/Navbar";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 export default function Home() {
-  // Note: Auth0 session would need to be handled differently in                      {/* Fallback for when video is not available */}
-  <div className="w-full h-full bg-gradient-to-br from-gray-200 to-gray-300 flex items-center justify-center">
-    <div className="text-center">
-      <div className="text-6xl mb-4"></div>
-      <p className="text-gray-600 font-medium">Hero Video Loading...</p>
-    </div>
-  </div>;
+  const [hasCompletedProfile, setHasCompletedProfile] = useState(false);
 
-  // Note: Auth0 session would need to be handled differently in client component
-  // For now, we'll use a placeholder
-  const user = null; // You'll need to implement proper auth state management
+  useEffect(() => {
+    // Check if user has completed profile from localStorage
+    const profileCompleted = localStorage.getItem("profile_completed");
+    setHasCompletedProfile(!!profileCompleted);
+  }, []);
 
   useEffect(() => {
     // Dynamically import GSAP to avoid SSR issues
@@ -43,7 +38,7 @@ export default function Home() {
           end: "bottom 20%",
           scrub: 1, // Makes animation follow scroll
           toggleActions: "play reverse play reverse",
-          markers: true, // Play on enter, reverse on leave
+          // Play on enter, reverse on leave
         },
       });
 
@@ -243,180 +238,193 @@ export default function Home() {
         {/* Features Section with scroll animation */}
         <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
-            <div className="features-header mb-16" data-scroll-reveal>
-              <div className="text-center">
-                <h2 className="font-display text-5xl font-bold text-gray-900 mb-6">
-                  AI FIND YOUR GREAT MEMBER WITH AI
-                </h2>
+            {/* Main Feature Showcase */}
+            <div className="features-header mb-20">
+              <div className="grid lg:grid-cols-2 gap-16 items-center">
+                {/* Left Side - Content */}
+                <div>
+                  <h2 className="font-display text-5xl font-bold text-gray-900 mb-6">
+                    DevCollab.Ai is your
+                    <br />
+                    <span className="text-gray-600">
+                      development partner provider
+                    </span>
+                  </h2>
+                  <p className="font-inter text-lg text-gray-600 mb-8 leading-relaxed">
+                    Build with people who match your skills and passion. Get
+                    AI-powered teammate suggestions based on your tech stack,
+                    interests, and working style.
+                  </p>
+                  <div className="flex flex-col sm:flex-row gap-4">
+                    <a
+                      href="/Team"
+                      className="bg-black hover:bg-gray-800 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300"
+                    >
+                      Start Finding
+                    </a>
+                    <a
+                      href="#how-it-works"
+                      className="border border-gray-300 hover:bg-gray-50 text-gray-700 font-semibold py-3 px-8 rounded-xl transition-all duration-300"
+                    >
+                      Learn More
+                    </a>
+                  </div>
+                </div>
+
+                {/* Right Side - App Preview */}
+                <div className="relative">
+                  <div className="relative mx-auto w-80 h-96 bg-white rounded-3xl shadow-2xl p-6 border border-gray-200">
+                    {/* Mock Phone Interface */}
+                    <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-100 rounded-2xl p-4">
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                        <div className="text-sm font-semibold text-gray-600">
+                          DevCollab.Ai
+                        </div>
+                        <div className="w-6 h-6 bg-black rounded-full flex items-center justify-center">
+                          <span className="text-white text-xs">⚡</span>
+                        </div>
+                      </div>
+
+                      {/* Mock Content */}
+                      <div className="space-y-4">
+                        <div className="bg-white rounded-lg p-3 shadow-sm">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <div className="w-6 h-6 bg-blue-500 rounded-full"></div>
+                            <span className="text-sm font-medium">
+                              React Developer
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            5 years experience • Remote
+                          </div>
+                        </div>
+
+                        <div className="bg-white rounded-lg p-3 shadow-sm">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <div className="w-6 h-6 bg-green-500 rounded-full"></div>
+                            <span className="text-sm font-medium">
+                              UI/UX Designer
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            3 years experience • Hybrid
+                          </div>
+                        </div>
+
+                        <div className="bg-white rounded-lg p-3 shadow-sm">
+                          <div className="flex items-center space-x-2 mb-2">
+                            <div className="w-6 h-6 bg-purple-500 rounded-full"></div>
+                            <span className="text-sm font-medium">
+                              Full Stack Dev
+                            </span>
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            7 years experience • On-site
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Floating elements */}
+                  <div className="absolute -top-4 -right-4 w-12 h-12 bg-blue-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <span className="text-white text-lg">🔍</span>
+                  </div>
+                  <div className="absolute -bottom-4 -left-4 w-12 h-12 bg-green-500 rounded-xl flex items-center justify-center shadow-lg">
+                    <span className="text-white text-lg">👥</span>
+                  </div>
+                </div>
               </div>
             </div>
 
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* Feature 1 */}
-              <div
-                className="feature-card bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-2xl p-8 hover:shadow-xl hover:scale-105"
-                data-scroll-reveal
-              >
-                <div className="text-4xl mb-4">🔍</div>
-                <h3 className="font-display text-xl font-bold text-gray-900 mb-3">
-                  Smart Search & Filtering
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Advanced search capabilities with AI-powered matching. Filter
-                  by skills, experience, location, and project preferences to
-                  find your ideal collaborators.
-                </p>
-              </div>
+            {/* Integration Partners Section */}
 
-              {/* Feature 2 */}
-              <div
-                className="feature-card bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-2xl p-8 hover:shadow-xl hover:scale-105"
-                data-scroll-reveal
-              >
-                <div className="text-4xl mb-4">👥</div>
-                <h3 className="font-display text-xl font-bold text-gray-900 mb-3">
-                  Team Formation
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Create diverse, high-performing teams with complementary
-                  skills. Our AI analyzes compatibility and suggests optimal
-                  team compositions.
-                </p>
-              </div>
-
-              {/* Feature 3 */}
-              <div
-                className="feature-card bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-2xl p-8 hover:shadow-xl hover:scale-105"
-                data-scroll-reveal
-              >
-                <div className="text-4xl mb-4">🔒</div>
-                <h3 className="font-display text-xl font-bold text-gray-900 mb-3">
-                  Secure Authentication
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Enterprise-grade security with Auth0 integration. Your data
-                  and connections are protected with industry-leading security
-                  standards.
-                </p>
-              </div>
-
-              {/* Feature 4 */}
-              <div
-                className="feature-card bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-2xl p-8 hover:shadow-xl hover:scale-105"
-                data-scroll-reveal
-              >
-                <div className="text-4xl mb-4">⚡</div>
-                <h3 className="font-display text-xl font-bold text-gray-900 mb-3">
-                  Real-time Collaboration
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Instant messaging, video calls, and collaborative workspaces.
-                  Work together seamlessly regardless of time zones or
-                  locations.
-                </p>
-              </div>
-
-              {/* Feature 5 */}
-              <div
-                className="feature-card bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-2xl p-8 hover:shadow-xl hover:scale-105"
-                data-scroll-reveal
-              >
-                <div className="text-4xl mb-4">📊</div>
-                <h3 className="font-display text-xl font-bold text-gray-900 mb-3">
-                  Analytics & Insights
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Track project progress, team performance, and collaboration
-                  metrics. Data-driven insights to optimize your development
-                  workflow.
-                </p>
-              </div>
-
-              {/* Feature 6 */}
-              <div
-                className="feature-card bg-white/80 backdrop-blur-sm border border-gray-200/60 rounded-2xl p-8 hover:shadow-xl hover:scale-105"
-                data-scroll-reveal
-              >
-                <div className="text-4xl mb-4">🤖</div>
-                <h3 className="font-display text-xl font-bold text-gray-900 mb-3">
-                  AI-Powered Matching
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Machine learning algorithms analyze skills, work styles, and
-                  project requirements to suggest the most compatible team
-                  members.
-                </p>
-              </div>
-            </div>
+            {/* Data Insights Section */}
           </div>
         </section>
 
         {/* How It Works Section with scroll animation */}
-        <section className="py-20 px-4 sm:px-6 lg:px-8 bg-black/5">
+        <section
+          id="how-it-works"
+          className="py-20 px-4 sm:px-6 lg:px-8 bg-gray-50"
+        >
           <div className="max-w-6xl mx-auto">
             <div
               className="how-it-works-header text-center mb-16"
               data-scroll-reveal
             >
               <h2 className="font-display text-5xl font-bold text-gray-900 mb-6">
-                How It Works
+                How DevCollab.Ai Works
               </h2>
               <p className="font-inter text-xl text-gray-600 max-w-3xl mx-auto">
-                Simple steps to start collaborating with amazing developers and
-                designers
+                From discovery to deployment—streamline your entire development
+                collaboration process
               </p>
             </div>
 
-            <div className="grid md:grid-cols-4 gap-8">
-              <div className="how-it-works-step text-center" data-scroll-reveal>
-                <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div
+                className="how-it-works-step text-center bg-white rounded-2xl p-8 shadow-sm"
+                data-scroll-reveal
+              >
+                <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 shadow-lg">
                   1
                 </div>
-                <h3 className="font-display text-lg font-semibold text-gray-900 mb-3">
-                  Sign Up
+                <h3 className="font-display text-xl font-semibold text-gray-900 mb-4">
+                  Create Profile
                 </h3>
-                <p className="text-gray-600">
-                  Create your profile with Auth0 security and showcase your
-                  skills and experience
+                <p className="text-gray-600 leading-relaxed">
+                  Build your developer profile with skills, experience, and
+                  project preferences. Our AI learns your collaboration style.
                 </p>
               </div>
 
-              <div className="how-it-works-step text-center" data-scroll-reveal>
-                <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+              <div
+                className="how-it-works-step text-center bg-white rounded-2xl p-8 shadow-sm"
+                data-scroll-reveal
+              >
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 shadow-lg">
                   2
                 </div>
-                <h3 className="font-display text-lg font-semibold text-gray-900 mb-3">
-                  Discover
+                <h3 className="font-display text-xl font-semibold text-gray-900 mb-4">
+                  Smart Matching
                 </h3>
-                <p className="text-gray-600">
-                  Browse through our talented community and use smart filters to
-                  find perfect matches
+                <p className="text-gray-600 leading-relaxed">
+                  AI analyzes compatibility, work styles, and project
+                  requirements to suggest optimal team compositions.
                 </p>
               </div>
 
-              <div className="how-it-works-step text-center" data-scroll-reveal>
-                <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+              <div
+                className="how-it-works-step text-center bg-white rounded-2xl p-8 shadow-sm"
+                data-scroll-reveal
+              >
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 shadow-lg">
                   3
                 </div>
-                <h3 className="font-display text-lg font-semibold text-gray-900 mb-3">
-                  Connect
+                <h3 className="font-display text-xl font-semibold text-gray-900 mb-4">
+                  Start Collaborating
                 </h3>
-                <p className="text-gray-600">
-                  Reach out to potential team members and start building
-                  meaningful connections
+                <p className="text-gray-600 leading-relaxed">
+                  Connect with teammates through integrated tools, real-time
+                  chat, and shared workspaces.
                 </p>
               </div>
 
-              <div className="how-it-works-step text-center" data-scroll-reveal>
-                <div className="w-16 h-16 bg-black rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-4">
+              <div
+                className="how-it-works-step text-center bg-white rounded-2xl p-8 shadow-sm"
+                data-scroll-reveal
+              >
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center text-white text-2xl font-bold mx-auto mb-6 shadow-lg">
                   4
                 </div>
-                <h3 className="font-display text-lg font-semibold text-gray-900 mb-3">
-                  Collaborate
+                <h3 className="font-display text-xl font-semibold text-gray-900 mb-4">
+                  Track & Improve
                 </h3>
-                <p className="text-gray-600">
-                  Work together on amazing projects and bring your innovative
-                  ideas to life
+                <p className="text-gray-600 leading-relaxed">
+                  Monitor project progress with analytics and AI-powered
+                  insights to continuously improve collaboration.
                 </p>
               </div>
             </div>
@@ -464,9 +472,9 @@ export default function Home() {
               Join thousands of developers and designers who are already
               building the future together on DevCollab.Ai
             </p>
-            {!user ? (
+            {!hasCompletedProfile ? (
               <a
-                href="/api/auth/login"
+                href="/onboarding"
                 className="bg-gradient-to-r from-black to-gray-800 hover:from-gray-800 hover:to-black text-white font-semibold py-4 px-12 rounded-2xl transition-all duration-300 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transform hover:-translate-y-1 text-lg"
               >
                 Get Started Free

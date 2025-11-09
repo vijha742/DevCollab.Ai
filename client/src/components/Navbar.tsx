@@ -6,10 +6,16 @@ import { TokenStorage } from "@/lib/tokenStorage";
 import { apiClient } from "@/lib/api";
 
 function Navbar() {
-  const { user, isLoading } = useUser();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [hasProfile, setHasProfile] = useState(false);
+
+  useEffect(() => {
+    // Check if user has completed profile
+    const profileCompleted = localStorage.getItem("profile_completed");
+    setHasProfile(!!profileCompleted);
+  }, []);
 
   useEffect(() => {
     const controlNavbar = () => {
@@ -99,6 +105,14 @@ function Navbar() {
               >
                 Team
               </Link>
+              {hasProfile && (
+                <Link
+                  href="/profile"
+                  className="text-black hover:text-gray-600 transition-colors duration-200 font-medium"
+                >
+                  Profile
+                </Link>
+              )}
               <Link
                 href="/about"
                 className="text-black hover:text-gray-600 transition-colors duration-200 font-medium"
@@ -113,7 +127,7 @@ function Navbar() {
               </Link>
             </div>
 
-            {/* User Profile / Auth */}
+            {/* Get Started Button */}
             <div className="flex items-center space-x-4">
               {!isLoading && (
                 <>
@@ -229,6 +243,19 @@ function Navbar() {
               >
                 Team
               </Link>
+              {hasProfile && (
+                <Link
+                  href="/profile"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className={`text-black hover:text-gray-600 transition-all duration-300 font-medium py-2 px-3 rounded-lg hover:bg-white/20 transform ${isMobileMenuOpen
+                      ? "translate-x-0 opacity-100"
+                      : "-translate-x-4 opacity-0"
+                    }`}
+                  style={{ transitionDelay: "250ms" }}
+                >
+                  Profile
+                </Link>
+              )}
               <Link
                 href="/about"
                 onClick={() => setIsMobileMenuOpen(false)}
@@ -252,7 +279,7 @@ function Navbar() {
                 Contact
               </Link>
 
-              {/* Mobile auth section */}
+              {/* Mobile get started section */}
               <div
                 className={`pt-3 border-t border-white/20 transform ${isMobileMenuOpen
                   ? "translate-x-0 opacity-100"
@@ -285,11 +312,11 @@ function Navbar() {
                   </div>
                 ) : (
                   <Link
-                    href="/api/auth/login"
+                    href="/onboarding"
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="bg-black text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 block text-center"
                   >
-                    Sign In
+                    Get Started
                   </Link>
                 )}
               </div>
