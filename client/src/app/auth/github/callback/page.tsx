@@ -43,9 +43,12 @@ export default function GitHubCallbackPage() {
 
                 setStatus('success');
 
-                // Redirect to dashboard after brief success message
+                // Check if user needs to complete onboarding
+                const redirectPath = authService.needsOnboarding() ? '/onboarding' : '/dashboard';
+
+                // Redirect after brief success message
                 setTimeout(() => {
-                    router.push('/dashboard');
+                    router.push(redirectPath);
                 }, 1500);
             } catch (err: any) {
                 console.error('GitHub authentication error:', err);

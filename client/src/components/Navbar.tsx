@@ -154,7 +154,7 @@ function Navbar() {
                     </div>
                   ) : (
                     <Link
-                      href="/api/auth/login"
+                      href="/api/auth/login?returnTo=%2Fonboarding"
                       className="bg-black hover:bg-gray-800 text-white px-6 py-2 rounded-full text-sm font-medium transition-colors duration-200"
                     >
                       Get Started
@@ -313,7 +313,7 @@ function Navbar() {
                   </div>
                 ) : (
                   <Link
-                    href="/onboarding"
+                    href="/api/auth/login?returnTo=%2Fonboarding"
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="bg-black text-white px-6 py-2 rounded-lg text-sm font-medium transition-colors duration-200 block text-center"
                   >

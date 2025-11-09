@@ -1,5 +1,6 @@
 package com.devcollab.service.impl;
 
+import com.devcollab.dto.request.OnboardingRequest;
 import com.devcollab.dto.request.UpdateUserRequest;
 import com.devcollab.dto.response.UserResponse;
 import com.devcollab.exception.ResourceNotFoundException;
@@ -132,5 +133,91 @@ public class UserServiceImpl implements UserService {
         // This will be implemented when GeminiService is complete
         User user = getUserEntityById(userId);
         return userMapper.toResponse(user);
+    }
+
+    @Override
+    public UserResponse completeOnboarding(Long userId, OnboardingRequest request) {
+        log.info("Completing onboarding for user ID: {}", userId);
+
+        User user = getUserEntityById(userId);
+
+        // Update basic information
+        if (request.getFullName() != null) {
+            user.setFullName(request.getFullName());
+        }
+        if (request.getEmail() != null) {
+            user.setEmail(request.getEmail());
+        }
+        if (request.getBio() != null) {
+            user.setBio(request.getBio());
+        }
+        if (request.getExperienceLevel() != null) {
+            user.setExperienceLevel(request.getExperienceLevel());
+        }
+
+        // Update optional information
+        if (request.getGithubUsername() != null) {
+            user.setGithubUsername(request.getGithubUsername());
+        }
+        if (request.getLinkedinUrl() != null) {
+            user.setLinkedinUrl(request.getLinkedinUrl());
+        }
+        if (request.getProfilePicture() != null) {
+            user.setProfilePicture(request.getProfilePicture());
+        }
+        if (request.getTimezone() != null) {
+            user.setTimezone(request.getTimezone());
+        }
+        if (request.getHoursPerWeek() != null) {
+            user.setHoursPerWeek(request.getHoursPerWeek());
+        }
+
+        // Update interests
+        if (request.getInterests() != null && !request.getInterests().isEmpty()) {
+            user.setInterests(request.getInterests());
+        }
+
+        // Handle skills
+        Set<Skill> skills = new HashSet<>();
+        
+        // Add skills by ID if provided
+        if (request.getSkillIds() != null && !request.getSkillIds().isEmpty()) {
+            skills.addAll(request.getSkillIds().stream()
+                    .map(skillService::getSkillEntityById)
+                    .collect(Collectors.toSet()));
+        }
+        
+        // Add or create skills by name if provided
+        if (request.getSkillNames() != null && !request.getSkillNames().isEmpty()) {
+            skills.addAll(skillService.getOrCreateSkills(request.getSkillNames()));
+        }
+        
+        if (!skills.isEmpty()) {
+            user.setSkills(skills);
+        }
+
+        User updatedUser = userRepository.save(user);
+        log.info("Onboarding completed successfully for user ID: {}", userId);
+        return userMapper.toResponse(updatedUser);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public boolean isOnboardingComplete(Long userId) {
+        log.info("Checking onboarding status for user ID: {}", userId);
+        User user = getUserEntityById(userId);
+        
+        // User has completed onboarding if they have:
+        // 1. A bio
+        // 2. At least one interest
+        // 3. Experience level set
+        boolean hasBasicInfo = user.getBio() != null && !user.getBio().trim().isEmpty();
+        boolean hasInterests = user.getInterests() != null && !user.getInterests().isEmpty();
+        boolean hasExperienceLevel = user.getExperienceLevel() != null;
+        
+        boolean isComplete = hasBasicInfo && hasInterests && hasExperienceLevel;
+        log.info("Onboarding complete for user ID {}: {}", userId, isComplete);
+        
+        return isComplete;
     }
 }

@@ -53,6 +53,10 @@ export async function syncWithBackend(user: Auth0User): Promise<boolean> {
             });
 
             console.log('Successfully synced with backend');
+
+            // Don't auto-redirect here, let the pages handle it
+            // The onboarding page will check the profile status
+
             return true;
         }
 

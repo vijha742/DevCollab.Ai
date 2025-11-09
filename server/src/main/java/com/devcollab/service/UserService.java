@@ -1,5 +1,6 @@
 package com.devcollab.service;
 
+import com.devcollab.dto.request.OnboardingRequest;
 import com.devcollab.dto.request.UpdateUserRequest;
 import com.devcollab.dto.response.UserResponse;
 import com.devcollab.model.User;
@@ -50,4 +51,14 @@ public interface UserService {
      * Parse user bio using AI and extract skills/interests
      */
     UserResponse enrichProfileWithAI(Long userId);
+
+    /**
+     * Complete user onboarding with profile information
+     */
+    UserResponse completeOnboarding(Long userId, OnboardingRequest request);
+
+    /**
+     * Check if user has completed onboarding
+     */
+    boolean isOnboardingComplete(Long userId);
 }

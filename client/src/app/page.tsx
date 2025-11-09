@@ -474,7 +474,7 @@ export default function Home() {
             </p>
             {!hasCompletedProfile ? (
               <a
-                href="/onboarding"
+                href="/api/auth/login?returnTo=%2Fonboarding"
                 className="bg-gradient-to-r from-black to-gray-800 hover:from-gray-800 hover:to-black text-white font-semibold py-4 px-12 rounded-2xl transition-all duration-300 shadow-lg shadow-black/20 hover:shadow-xl hover:shadow-black/30 transform hover:-translate-y-1 text-lg"
               >
                 Get Started Free

@@ -54,6 +54,21 @@ export interface UpdateUserRequest {
     skillIds?: number[];
 }
 
+export interface OnboardingRequest {
+    fullName: string;
+    email: string;
+    bio: string;
+    experienceLevel: ExperienceLevel;
+    githubUsername?: string;
+    linkedinUrl?: string;
+    profilePicture?: string;
+    timezone?: string;
+    hoursPerWeek?: number;
+    interests: string[];
+    skillNames?: string[];
+    skillIds?: number[];
+}
+
 export interface CreateProjectRequest {
     title: string;
     description: string;
@@ -375,6 +390,25 @@ class ApiClient {
     async enrichProfile(userId: number): Promise<ApiResponse<UserResponse>> {
         return this.request<ApiResponse<UserResponse>>(`/users/${userId}/enrich-profile`, {
             method: 'POST',
+        });
+    }
+
+    /**
+     * Complete user onboarding with profile information
+     */
+    async completeOnboarding(userId: number, data: OnboardingRequest): Promise<ApiResponse<UserResponse>> {
+        return this.request<ApiResponse<UserResponse>>(`/users/${userId}/onboarding`, {
+            method: 'POST',
+            body: JSON.stringify(data),
+        });
+    }
+
+    /**
+     * Check if user has completed onboarding
+     */
+    async checkOnboardingStatus(userId: number): Promise<ApiResponse<boolean>> {
+        return this.request<ApiResponse<boolean>>(`/users/${userId}/onboarding-status`, {
+            method: 'GET',
         });
     }
 

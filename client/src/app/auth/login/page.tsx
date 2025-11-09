@@ -18,7 +18,13 @@ export default function LoginPage() {
 
         try {
             await authService.login({ email, password });
-            router.push('/dashboard');
+
+            // Check if user needs to complete onboarding
+            if (authService.needsOnboarding()) {
+                router.push('/onboarding');
+            } else {
+                router.push('/dashboard');
+            }
         } catch (err: any) {
             setError(err.message || 'Login failed');
         } finally {

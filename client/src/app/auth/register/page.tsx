@@ -42,7 +42,9 @@ export default function RegisterPage() {
                 fullName: formData.fullName,
                 experienceLevel: formData.experienceLevel,
             });
-            router.push('/dashboard');
+
+            // Always redirect new users to onboarding
+            router.push('/onboarding');
         } catch (err: any) {
             setError(err.message || 'Registration failed');
         } finally {

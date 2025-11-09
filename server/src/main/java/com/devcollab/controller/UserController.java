@@ -1,11 +1,14 @@
 package com.devcollab.controller;
 
+import com.devcollab.dto.request.OnboardingRequest;
 import com.devcollab.dto.request.UpdateUserRequest;
 import com.devcollab.dto.response.ApiResponse;
 import com.devcollab.dto.response.UserResponse;
 import com.devcollab.service.UserService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -80,5 +83,22 @@ public class UserController {
         log.info("Enrich profile request for user ID: {}", id);
         UserResponse user = userService.enrichProfileWithAI(id);
         return ResponseEntity.ok(ApiResponse.success("Profile enriched successfully", user));
+    }
+
+    @PostMapping("/{id}/onboarding")
+    public ResponseEntity<ApiResponse<UserResponse>> completeOnboarding(
+            @PathVariable Long id,
+            @Valid @RequestBody OnboardingRequest request) {
+        log.info("Onboarding request for user ID: {}", id);
+        UserResponse user = userService.completeOnboarding(id, request);
+        return ResponseEntity.status(HttpStatus.OK)
+                .body(ApiResponse.success("Onboarding completed successfully", user));
+    }
+
+    @GetMapping("/{id}/onboarding-status")
+    public ResponseEntity<ApiResponse<Boolean>> checkOnboardingStatus(@PathVariable Long id) {
+        log.info("Check onboarding status for user ID: {}", id);
+        boolean isComplete = userService.isOnboardingComplete(id);
+        return ResponseEntity.ok(ApiResponse.success(isComplete));
     }
 }

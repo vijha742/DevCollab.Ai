@@ -1,5 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
+import { apiClient, ExperienceLevel, OnboardingRequest } from "@/lib/api";
+import { TokenStorage } from "@/lib/tokenStorage";
 
 interface UserProfile {
   // Step 1 data
@@ -148,18 +150,83 @@ const Onboarding = () => {
     }
   };
 
+  const mapExperienceLevel = (level: string): ExperienceLevel => {
+    if (level.includes("Beginner")) return "BEGINNER";
+    if (level.includes("Intermediate")) return "INTERMEDIATE";
+    if (level.includes("Advanced")) return "ADVANCED";
+    if (level.includes("Expert")) return "EXPERT";
+    return "BEGINNER";
+  };
+
   const handleSubmit = async () => {
-    // Here you would typically save the profile data to your backend
-    console.log("Profile data:", profile);
+    try {
+      // Get user ID from TokenStorage (backend sync)
+      const userData = TokenStorage.getUserData();
 
-    // Mark profile as completed in localStorage
-    localStorage.setItem("profile_completed", "true");
+      if (!userData?.userId) {
+        alert("User ID not found. Please login again.");
+        window.location.href = "/api/auth/login";
+        return;
+      }
 
-    // Save the complete profile data
-    localStorage.setItem("user_profile", JSON.stringify(profile));
+      // Validate required fields
+      if (!profile.firstName || !profile.lastName || !profile.email || !profile.bio || !profile.experienceLevel) {
+        alert("Please fill in all required fields (Name, Email, Bio, Experience Level)");
+        return;
+      }
 
-    // Redirect to the main app
-    window.location.href = "/Team";
+      if (profile.interests.length === 0) {
+        alert("Please select at least one interest");
+        return;
+      }
+
+      // Prepare onboarding request
+      const fullName = `${profile.firstName} ${profile.lastName}`.trim();
+      const combinedBio = profile.extendedBio
+        ? `${profile.bio}\n\n${profile.extendedBio}`
+        : profile.bio;
+
+      const onboardingData: OnboardingRequest = {
+        fullName,
+        email: profile.email,
+        bio: combinedBio,
+        experienceLevel: mapExperienceLevel(profile.experienceLevel),
+        githubUsername: profile.github || undefined,
+        linkedinUrl: profile.linkedin ? `https://linkedin.com/in/${profile.linkedin}` : undefined,
+        profilePicture: profile.profilePic || undefined,
+        timezone: undefined, // Can be added to form if needed
+        hoursPerWeek: undefined, // Can be added to form if needed
+        interests: profile.interests,
+        skillNames: profile.skills.length > 0 ? profile.skills : undefined,
+      };
+
+      console.log("Submitting onboarding data:", onboardingData);
+
+      // Send data to backend
+      const response = await apiClient.completeOnboarding(userData.userId, onboardingData);
+
+      console.log("Onboarding response:", response);
+
+      // Mark profile as completed in localStorage
+      localStorage.setItem("profile_completed", "true");
+
+      // Save the complete profile data
+      localStorage.setItem("user_profile", JSON.stringify(profile));
+
+      // Store updated user data
+      if (response.data) {
+        localStorage.setItem("user_data", JSON.stringify(response.data));
+      }
+
+      // Show success message
+      alert("Profile completed successfully!");
+
+      // Redirect to the main app
+      window.location.href = "/Team";
+    } catch (error: any) {
+      console.error("Error completing onboarding:", error);
+      alert(`Failed to complete onboarding: ${error.message || "Unknown error"}`);
+    }
   };
 
   return (
@@ -190,25 +257,22 @@ const Onboarding = () => {
           <div className="mb-8">
             <div className="flex items-center justify-center space-x-4">
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  currentStep >= 1
+                className={`w-10 h-10 rounded-full flex items-center justify-center ${currentStep >= 1
                     ? "bg-black text-white"
                     : "bg-gray-200 text-gray-800"
-                }`}
+                  }`}
               >
                 1
               </div>
               <div
-                className={`w-20 h-1 ${
-                  currentStep >= 2 ? "bg-black" : "bg-gray-200"
-                }`}
+                className={`w-20 h-1 ${currentStep >= 2 ? "bg-black" : "bg-gray-200"
+                  }`}
               ></div>
               <div
-                className={`w-10 h-10 rounded-full flex items-center justify-center ${
-                  currentStep >= 2
+                className={`w-10 h-10 rounded-full flex items-center justify-center ${currentStep >= 2
                     ? "bg-black text-white"
                     : "bg-gray-200 text-gray-800"
-                }`}
+                  }`}
               >
                 2
               </div>
@@ -402,11 +466,10 @@ const Onboarding = () => {
                             ),
                           })
                         }
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          profile.interests.includes(interest)
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${profile.interests.includes(interest)
                             ? "bg-black text-white"
                             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        }`}
+                          }`}
                       >
                         {interest}
                       </button>
@@ -430,11 +493,10 @@ const Onboarding = () => {
                             skills: toggleArrayItem(profile.skills, skill),
                           })
                         }
-                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${
-                          profile.skills.includes(skill)
+                        className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${profile.skills.includes(skill)
                             ? "bg-black text-white"
                             : "bg-gray-100 text-gray-700 hover:bg-gray-200"
-                        }`}
+                          }`}
                       >
                         {skill}
                       </button>
@@ -598,11 +660,10 @@ const Onboarding = () => {
               <button
                 onClick={handlePrevious}
                 disabled={currentStep === 1}
-                className={`px-6 py-3 rounded-xl font-medium ${
-                  currentStep === 1
+                className={`px-6 py-3 rounded-xl font-medium ${currentStep === 1
                     ? "bg-gray-100 text-gray-400 cursor-not-allowed"
                     : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                }`}
+                  }`}
               >
                 Previous
               </button>

@@ -279,6 +279,53 @@ class AuthService {
     }
 
     /**
+     * Check if user needs to complete onboarding (from localStorage)
+     * Returns true if profile is not completed
+     */
+    needsOnboarding(): boolean {
+        if (typeof window === 'undefined') return false;
+
+        const profileCompleted = localStorage.getItem('profile_completed');
+        return !profileCompleted || profileCompleted !== 'true';
+    }
+
+    /**
+     * Check onboarding status from backend
+     * Returns true if user needs to complete onboarding
+     */
+    async checkOnboardingStatusFromBackend(): Promise<boolean> {
+        try {
+            const userId = this.getUserId();
+            if (!userId) return true;
+
+            const response = await fetch(`${this.baseUrl}/users/${userId}/onboarding-status`, {
+                headers: {
+                    'Authorization': `Bearer ${this.getAccessToken()}`,
+                },
+            });
+
+            if (response.ok) {
+                const result = await response.json();
+                const isComplete = result.data;
+
+                // Update localStorage based on backend status
+                if (isComplete) {
+                    localStorage.setItem('profile_completed', 'true');
+                } else {
+                    localStorage.removeItem('profile_completed');
+                }
+
+                return !isComplete; // Return true if needs onboarding
+            }
+
+            return true; // Default to needing onboarding if check fails
+        } catch (error) {
+            console.error('Error checking onboarding status:', error);
+            return this.needsOnboarding(); // Fallback to localStorage check
+        }
+    }
+
+    /**
      * Save authentication tokens and user info
      */
     private saveTokens(authResponse: AuthResponse): void {
