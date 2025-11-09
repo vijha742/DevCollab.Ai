@@ -4,6 +4,7 @@ import com.devcollab.dto.request.OnboardingRequest;
 import com.devcollab.dto.request.UpdateUserRequest;
 import com.devcollab.dto.response.ApiResponse;
 import com.devcollab.dto.response.UserResponse;
+import com.devcollab.exception.UnauthorizedException;
 import com.devcollab.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -42,7 +43,13 @@ public class UserController {
 
     @GetMapping("/me")
     public ResponseEntity<ApiResponse<UserResponse>> getCurrentUser(Authentication authentication) {
-        log.info("Get current user request");
+        log.info("Get current user request, authentication: {}", authentication != null ? authentication.getName() : "null");
+        
+        if (authentication == null) {
+            log.error("Authentication is null for /api/users/me request");
+            throw new UnauthorizedException("Authentication required");
+        }
+        
         String email = authentication.getName();
         UserResponse user = userService.getUserByEmail(email);
         return ResponseEntity.ok(ApiResponse.success(user));

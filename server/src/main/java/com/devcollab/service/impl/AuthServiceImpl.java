@@ -272,9 +272,13 @@ public class AuthServiceImpl implements AuthService {
         }
     }
     
+    @Transactional
     private String createRefreshToken(User user) {
-        // Delete existing refresh token if any
-        refreshTokenRepository.findByUser(user).ifPresent(refreshTokenRepository::delete);
+        // Delete existing refresh token if any - using deleteByUser for direct deletion
+        refreshTokenRepository.deleteByUser(user);
+        
+        // Flush to ensure deletion is committed before insertion
+        refreshTokenRepository.flush();
 
         RefreshToken refreshToken = new RefreshToken();
         refreshToken.setUser(user);

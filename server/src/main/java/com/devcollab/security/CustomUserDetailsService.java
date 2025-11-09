@@ -24,9 +24,17 @@ public class CustomUserDetailsService implements UserDetailsService {
         com.devcollab.model.User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
+        // For OAuth users, use providerId as password. For regular users, use their actual password.
+        String password = user.getPassword();
+        if (password == null && user.getProviderId() != null) {
+            // Extract the provider part from providerId (e.g., "google-oauth2" from "google-oauth2|117579955764407811576")
+            String[] parts = user.getProviderId().split("\\|");
+            password = parts.length > 0 ? parts[0] : "oauth-user-" + user.getId();
+        }
+
         return User.builder()
                 .username(user.getEmail())
-                .password(user.getPassword())
+                .password(password != null ? password : "no-password")
                 .authorities(new ArrayList<>())
                 .accountExpired(false)
                 .accountLocked(!user.getActive())

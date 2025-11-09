@@ -20,6 +20,9 @@ export interface Auth0User {
  */
 export async function syncWithBackend(user: Auth0User): Promise<boolean> {
     try {
+        // Clear any existing tokens first to prevent conflicts
+        TokenStorage.clearTokens();
+
         // Determine provider from the Auth0 sub
         let provider: 'auth0' | 'google' | 'github' = 'auth0';
         if (user.sub?.startsWith('google-oauth2|')) {

@@ -134,7 +134,10 @@ function Navbar() {
                 <>
                   {user ? (
                     <div className="flex items-center space-x-3">
-                      <div className="flex items-center space-x-2 bg-white/30 rounded-full px-3 py-1.5">
+                      <Link
+                        href="/profile"
+                        className="flex items-center space-x-2 bg-white/30 rounded-full px-3 py-1.5 hover:bg-white/50 transition-colors duration-200"
+                      >
                         <img
                           src={user.picture || "/default-avatar.png"}
                           alt={user.name || "User"}
@@ -143,7 +146,7 @@ function Navbar() {
                         <span className="text-black text-sm font-medium hidden sm:block">
                           {user.name?.split(" ")[0] || "User"}
                         </span>
-                      </div>
+                      </Link>
                       <a
                         href="/api/auth/logout"
                         onClick={handleLogout}
@@ -290,7 +293,11 @@ function Navbar() {
               >
                 {user ? (
                   <div className="flex flex-col space-y-2">
-                    <div className="flex items-center space-x-2 bg-white/30 rounded-lg px-3 py-2">
+                    <Link
+                      href="/profile"
+                      onClick={() => setIsMobileMenuOpen(false)}
+                      className="flex items-center space-x-2 bg-white/30 rounded-lg px-3 py-2 hover:bg-white/50 transition-colors duration-200"
+                    >
                       <img
                         src={user.picture || "/default-avatar.png"}
                         alt={user.name || "User"}
@@ -299,7 +306,7 @@ function Navbar() {
                       <span className="text-black text-sm font-medium">
                         {user.name?.split(" ")[0] || "User"}
                       </span>
-                    </div>
+                    </Link>
                     <a
                       href="/api/auth/logout"
                       onClick={(e) => {
