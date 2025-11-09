@@ -590,47 +590,6 @@ const Onboarding = () => {
                     </p>
                   </div>
                 </div>
-
-                {/* Profile Preview */}
-                <div className="bg-gray-50 rounded-xl p-6">
-                  <h3 className="text-lg text-black font-semibold mb-4">
-                    Profile Preview
-                  </h3>
-                  <div className="flex items-start space-x-4">
-                    <img
-                      src={
-                        profile.profilePic ||
-                        "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=64&h=64&fit=crop&crop=face"
-                      }
-                      alt="Profile"
-                      className="w-16 h-16 rounded-full object-cover"
-                    />
-                    <div>
-                      <h4 className="font-semibold text-black text-lg">
-                        {profile.firstName} {profile.lastName}
-                      </h4>
-                      <p className="text-gray-600">{profile.experienceLevel}</p>
-                      <p className="text-sm text-gray-800 mt-1">
-                        {profile.bio}
-                      </p>
-                      <div className="flex flex-wrap gap-1 mt-2">
-                        {profile.skills.slice(0, 3).map((skill) => (
-                          <span
-                            key={skill}
-                            className="bg-black text-white px-2 py-1 rounded-full text-xs"
-                          >
-                            {skill}
-                          </span>
-                        ))}
-                        {profile.skills.length > 3 && (
-                          <span className="text-gray-800 text-xs">
-                            +{profile.skills.length - 3} more
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
               </div>
             )}
 

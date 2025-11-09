@@ -239,27 +239,28 @@ export default function Home() {
         <section id="features" className="py-20 px-4 sm:px-6 lg:px-8">
           <div className="max-w-7xl mx-auto">
             {/* Main Feature Showcase */}
-            <div className="features-header mb-20" data-scroll-reveal>
+            <div className="features-header mb-20">
               <div className="grid lg:grid-cols-2 gap-16 items-center">
                 {/* Left Side - Content */}
                 <div>
                   <h2 className="font-display text-5xl font-bold text-gray-900 mb-6">
                     DevCollab.Ai is your
                     <br />
-                    <span className="text-gray-600">development memory</span>
+                    <span className="text-gray-600">
+                      development partner provider
+                    </span>
                   </h2>
                   <p className="font-inter text-lg text-gray-600 mb-8 leading-relaxed">
-                    Keep track of every project, collaboration, and skill
-                    development. DevCollab.Ai connects you with the right
-                    teammates and keeps your development journey organized in
-                    one place.
+                    Build with people who match your skills and passion. Get
+                    AI-powered teammate suggestions based on your tech stack,
+                    interests, and working style.
                   </p>
                   <div className="flex flex-col sm:flex-row gap-4">
                     <a
                       href="/Team"
                       className="bg-black hover:bg-gray-800 text-white font-semibold py-3 px-8 rounded-xl transition-all duration-300"
                     >
-                      Start Collaborating
+                      Start Finding
                     </a>
                     <a
                       href="#how-it-works"
