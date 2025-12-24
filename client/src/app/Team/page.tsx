@@ -512,7 +512,7 @@ function TeamSearchPage(): React.JSX.Element {
 
         {/* Selected Skills Tags */}
         {selectedSkills.length > 0 && (
-          <div className="mb-8">
+          <div className="mb-4 bg-red-600">
             <div className="flex flex-wrap gap-2">
               {selectedSkills.map((skill: string) => (
                 <span
@@ -543,6 +543,17 @@ function TeamSearchPage(): React.JSX.Element {
             </div>
           </div>
         )}
+        {/* google gemini */}
+        <div className="flex justify-start items-center mb-4 md:w-[70vw]">
+          <div className="flex justify-start items-start h-full">
+            <img
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8f/Google-gemini-icon.svg/2048px-Google-gemini-icon.svg.png"
+              alt=""
+              className="md:h-10 md:w-auto h-16 w-16 mr-4"
+            />
+            <p className="text-black text-xl">hi</p>
+          </div>
+        </div>
 
         {/* User Cards Section - Split Layout */}
         {loading ? (
